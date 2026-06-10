@@ -1,0 +1,1 @@
+Events Hub is a website used to create events and let users book events.
