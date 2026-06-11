@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ImportEventsJob;
 use App\Models\Event;
 use Illuminate\Http\Request;
 
@@ -49,5 +50,23 @@ class EventController extends Controller
         }
         Event::create($data);
         return redirect()->route('events.index');
+    }
+
+    public function upload()
+    {
+        return view('admin.events.import');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimetypes:text/csv,text/plain'
+        ]);
+
+        $file = $request->file('file')->store('imports', 'local');
+
+        ImportEventsJob::dispatch($file, auth()->id());
+
+        return back()->with('success', 'File will import shortly');
     }
 }

@@ -9,6 +9,11 @@
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-6">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
+                    @error('tickets')
+                        <div style="color: red; font-weight: bold">
+                            {{ $message }}
+                        </div>
+                    @enderror
                     <form action="{{ route('checkout', $event->id) }}" method="POST">
                         @csrf
                         <input type="number" name="tickets" min="1" value="1">

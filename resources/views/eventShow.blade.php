@@ -20,7 +20,16 @@
                                 <div class="p-3">{{ $event->title }}</div>
                                 <div class="p-3">{{ $event->description }}</div>
                                 <div class="p-3">{{ $event->price }}</div>
-                                <div class="p-3"><a href="{{ route('bookEvent', $event->id) }}"><button class="btn btn-primary">Book Now</button></a></div>
+                                <div class="p-3">Seats Left:{{$event->remainingSeats()}}</div>
+                                <div class="p-3">
+                                    @if(!$event->soldOut())
+                                        <a href="{{ route('bookEvent', $event->id) }}">
+                                            <button class="btn btn-primary">Book Now</button>
+                                        </a>
+                                    @else
+                                        <button class="btn btn-primary" disabled>Sold Out</button>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>

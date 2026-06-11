@@ -3,9 +3,14 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Dashboard') }}
         </h2>
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight" style="text-align: right">
-            <a href="{{ route('events.create') }}">{{ __('Create') }}</a>
-        </h2>
+        <div>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight" style="text-align: right">
+                <a href="{{ route('events.upload') }}">{{ __('Upload CSV') }}</a>
+            </h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight" style="text-align: right">
+                <a href="{{ route('events.create') }}">{{ __('Create') }}</a>
+            </h2>
+        </div>
     </x-slot>
 
     <div class="py-12">

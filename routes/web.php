@@ -15,7 +15,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
-Route::middleware(['auth','verified', 'admin'])->group(function() {
+Route::prefix('admin/')->middleware(['auth','verified', 'admin'])->group(function() {
     Route::get('/admin_dashboard', function () {
         return view('admin.dashboard');
     })->name('admin_dashboard');
@@ -24,6 +24,8 @@ Route::middleware(['auth','verified', 'admin'])->group(function() {
     Route::get('events/create', [EventController::class, 'create'])->name('events.create');
     Route::post('events/create', [EventController::class, 'store'])->name('events.store');
 
+    Route::get('/events/upload', [EventController::class,'upload'])->name('events.upload');
+    Route::post('/events/import', [EventController::class,'import'])->name('events.import');
 });
 
 
@@ -34,6 +36,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('events', [UserController::class, 'events'])->name('eventsList');
     Route::get('events/{event}', [UserController::class, 'show'])->name('eventShow');
+    
 
     Route::get('bookEvent/{event}', [BookingController::class, 'bookEvent'])->name('bookEvent');
     Route::post('checkout/{event}', [BookingController::class, 'checkout'])->name('checkout');
