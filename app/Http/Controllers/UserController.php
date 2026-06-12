@@ -50,7 +50,7 @@ class UserController extends Controller
             $query->where('price', '<=', $request->max_price);
         }
 
-        $events = $query->latest()->paginate(6)->withQueryString();
+        $events = $query->where('status', 'published')->latest()->paginate(6)->withQueryString();
 
         return view('events', compact('events'));
     }

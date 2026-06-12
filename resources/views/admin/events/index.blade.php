@@ -1,15 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-        <div>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight" style="text-align: right">
-                <a href="{{ route('events.upload') }}">{{ __('Upload CSV') }}</a>
-            </h2>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight" style="text-align: right">
-                <a href="{{ route('events.create') }}">{{ __('Create') }}</a>
-            </h2>
+        <div class="row">
+            <div class="col-md-6">
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                    {{ __('Events') }}
+                </h2>
+            </div>
+            <div class="flex items-center justify-end col-md-6">
+                <a href="{{ route('events.upload') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ml-4"> {{ __('Upload CSV') }}</a>
+                <a href="{{ route('events.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ml-4"> {{ __('Create Event') }}</a>
+            </div>
         </div>
     </x-slot>
 
@@ -21,7 +21,6 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Title</th>
-                            <th scope="col">Description</th>
                             <th scope="col">Address</th>
                             <th scope="col">City</th>
                             <th scope="col">State</th>
@@ -41,7 +40,6 @@
                             <tr>
                                 <th scope="row"> {{ $event->id }} </th>
                                 <td>{{ $event->title }}</td>
-                                <td>{{ Str::limit($event->description, 10) }}</td>
                                 <td>{{ $event->address }}</td>
                                 <td>{{ $event->city }}</td>
                                 <td>{{ $event->state }}</td>
@@ -53,7 +51,9 @@
                                 <td>{{ $event->capacity }}</td>
                                 <td>{{ $event->status }}</td>
                                 <td>{{ $event->contact_number }}</td>
-                                <td> Edit Delete </td>
+                                <td><a href="{{ route('events.edit', $event->id) }}" class="btn btn-warning" style="margin-bottom: 10px">Edit</a>
+                                    <a href="{{ route('events.editStatus', $event->id) }}" class="btn btn-primary" style="margin-bottom: 10px">Update Status</a>
+                                    <a href="{{ route('events.delete', $event->id) }}" class="btn btn-danger">Delete</a></td>
                             </tr>
                         @endforeach
                     </tbody>

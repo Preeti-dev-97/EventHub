@@ -13,6 +13,11 @@ class Event extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function address($event)
+    {
+        return ucwords($event->address . ', ' . $event->city . ', ' . $event->state . ', ' . $event->country);
+    }
+
     public function bookings()
     {
         return $this->hasMany(Booking::class);
