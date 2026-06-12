@@ -12,4 +12,31 @@ class Event extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function address($event)
+    {
+        return ucwords($event->address . ', ' . $event->city . ', ' . $event->state . ', ' . $event->country);
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    public function bookedSeats()
+    {
+        return $this->bookings()
+            ->where('status','paid')
+            ->sum('quantity');
+    }
+
+    public function remainingSeats()
+    {
+        return max(0, $this->capacity - $this->bookedSeats());
+    }
+
+    public function soldOut()
+    {
+        return $this->remainingSeats() <= 0;
+    }
 }

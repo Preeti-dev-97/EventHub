@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,7 +15,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
-Route::middleware(['auth','verified', 'admin'])->group(function() {
+Route::prefix('admin/')->middleware(['auth','verified', 'admin'])->group(function() {
     Route::get('/admin_dashboard', function () {
         return view('admin.dashboard');
     })->name('admin_dashboard');
@@ -21,7 +23,14 @@ Route::middleware(['auth','verified', 'admin'])->group(function() {
     Route::get('events', [EventController::class, 'index'])->name('events.index');
     Route::get('events/create', [EventController::class, 'create'])->name('events.create');
     Route::post('events/create', [EventController::class, 'store'])->name('events.store');
+    Route::get('events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
+    Route::post('events/{event}/edit', [EventController::class, 'update'])->name('events.update');
+    Route::get('/events/{event}/delete', [EventController::class,'delete'])->name('events.delete');
+    Route::get('events/{event}/editStatus', [EventController::class, 'editStatus'])->name('events.editStatus');
+    Route::post('events/{event}/editStatus', [EventController::class, 'updateStatus'])->name('events.updateStatus');
 
+    Route::get('/events/upload', [EventController::class,'upload'])->name('events.upload');
+    Route::post('/events/import', [EventController::class,'import'])->name('events.import');
 });
 
 
@@ -29,6 +38,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('events', [UserController::class, 'events'])->name('eventsList');
+    Route::get('events/{event}', [UserController::class, 'show'])->name('eventShow');
+    
+
+    Route::get('bookEvent/{event}', [BookingController::class, 'bookEvent'])->name('bookEvent');
+    Route::post('checkout/{event}', [BookingController::class, 'checkout'])->name('checkout');
+    Route::get('payment/success', [BookingController::class, 'success'])->name('payment.success');
 });
 
 require __DIR__.'/auth.php';
