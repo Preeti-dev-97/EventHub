@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->longText('description');
             $table->text('banner')->nullable();
+            $table->text('thumbnail')->nullable();
             $table->text('address');
             $table->text('city');
             $table->text('state');

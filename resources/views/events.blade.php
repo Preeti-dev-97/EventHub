@@ -28,7 +28,7 @@
                         @forelse ($events as $event)
                             <div class="col-sm-4 mb-3 mb-sm-0">
                                 <div class="card">
-                                    <img src="{{ $event->banner ? Storage::disk('s3')->temporaryUrl($event->banner, now()->addMinutes(30)) : asset('storage/default_banner.jpg') }}"
+                                    <img src="{{ $event->thumbnail ? Storage::disk('s3')->temporaryUrl($event->thumbnail, now()->addMinutes(30)) : asset('storage/default_banner.jpg') }}"
                                         class="card-img-top" alt="{{ $event->title }}"
                                         style="height: 300px !important">
                                     <div class="card-body">

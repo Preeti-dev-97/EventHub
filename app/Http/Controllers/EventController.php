@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\ImportEventsJob;
+use App\Jobs\ProcessEventImageJob;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -22,8 +23,7 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
-        $data =
-            $request->validate([
+        $data = $request->validate([
                 'title' => 'required',
                 'description' => 'required',
                 'address' => 'required',
@@ -39,11 +39,14 @@ class EventController extends Controller
             ]);
 
         $data['user_id'] = auth()->id();
+        $event = Event::create($data);
 
         if ($request->hasFile('banner')) {
-            $data['banner'] = $request->file('banner')->store('events', 's3');
+            $path = $request->file('banner')->store('events', 's3');
+            $event->banner = $path;
+            $event->save();
+            ProcessEventImageJob::dispatch($event);
         }
-        Event::create($data);
         return redirect()->route('events.index');
     }
 
@@ -76,13 +79,22 @@ class EventController extends Controller
         if ($request->hasFile('banner')) {
 
             // delete old file
-            if ($event->banner && Storage::disk('s3')->exists($event->banner)) 
+            if ($event->banner)
             {
-                Storage::disk('s3')->delete($event->banner);
+                if(Storage::disk('s3')->exists($event->banner)) 
+                {
+                    Storage::disk('s3')->delete($event->banner);
+                }
+
+                if($event->thumbnail && Storage::disk('s3')->exists($event->thumbnail))
+                {
+                    Storage::disk('s3')->delete($event->thumbnail);
+                }
             }
 
             // upload new file
             $data['banner'] = $request->file('banner')->store('events', 's3');
+            ProcessEventImageJob::dispatch($event);
         }
 
         $event->update($data);
@@ -93,9 +105,16 @@ class EventController extends Controller
     {
         $event = Event::find($event);
 
-        if ($event->banner && Storage::disk('s3')->exists($event->banner)) 
+        if ($event->banner)
         {
-            Storage::disk('s3')->delete($event->banner);
+            if(Storage::disk('s3')->exists($event->banner))
+            {
+                Storage::disk('s3')->delete($event->banner);
+            }
+            if($event->thumbnail && Storage::disk('s3')->exists($event->thumbnail))
+            {
+                Storage::disk('s3')->delete($event->thumbnail);
+            }
         }
         $event->delete();
 

@@ -20,7 +20,7 @@
                         <div class="row gx-5">
                             <div class="col">
                                 <div class="p-3">
-                                    <img src="{{ $event->banner ? Storage::disk('s3')->temporaryUrl($event->banner, now()->addMinutes(30)) : asset('storage/default_banner.jpg') }}"alt="{{ $event->title
+                                    <img src="{{ $event->thumbnail ? Storage::disk('s3')->temporaryUrl($event->thumbnail, now()->addMinutes(30)) : asset('storage/default_banner.jpg') }}"alt="{{ $event->title
                                      }}">
                                 </div>
                             </div>

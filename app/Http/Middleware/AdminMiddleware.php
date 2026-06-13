@@ -18,7 +18,6 @@ class AdminMiddleware
     {
         if(Auth::user()->role == 'admin')
         {
-            \Log::info('inside new admin middleware');
             return $next($request);
         }
 

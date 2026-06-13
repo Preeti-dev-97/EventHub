@@ -104,8 +104,8 @@
                             </div>
 
                             <div class="col-md-6 mt-4">
-                                @if($event->banner && Storage::disk('s3')->exists($event->banner))
-                                    <img src="{{ Storage::disk('s3')->temporaryUrl($event->banner, now()->addMinutes(30)) }}" width="200" alt="Banner">
+                                @if($event->thumbnail && Storage::disk('s3')->exists($event->thumbnail))
+                                    <img src="{{ Storage::disk('s3')->temporaryUrl($event->thumbnail, now()->addMinutes(30)) }}" width="200" alt="Banner">
                                 @endif
                             </div>
 
