@@ -7,8 +7,8 @@
                 </h2>
             </div>
             <div class="flex items-center justify-end col-md-6">
-                <a href="{{ route('events.upload') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ml-4"> {{ __('Upload CSV') }}</a>
-                <a href="{{ route('events.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ml-4"> {{ __('Create Event') }}</a>
+                <a href="{{ route(Auth::user()->role .'.events.upload') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ml-4"> {{ __('Upload CSV') }}</a>
+                <a href="{{ route(Auth::user()->role .'.events.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ml-4"> {{ __('Create Event') }}</a>
             </div>
         </div>
     </x-slot>
@@ -51,9 +51,11 @@
                                 <td>{{ $event->capacity }}</td>
                                 <td>{{ $event->status }}</td>
                                 <td>{{ $event->contact_number }}</td>
-                                <td><a href="{{ route('events.edit', $event->id) }}" class="btn btn-warning" style="margin-bottom: 10px">Edit</a>
-                                    <a href="{{ route('events.editStatus', $event->id) }}" class="btn btn-primary" style="margin-bottom: 10px">Update Status</a>
-                                    <a href="{{ route('events.delete', $event->id) }}" class="btn btn-danger">Delete</a></td>
+                                <td><a href="{{ route(Auth::user()->role .'.events.edit', $event->id) }}" class="btn btn-warning" style="margin-bottom: 10px">Edit</a>
+                                    @if(Auth::user()->role == 'admin')
+                                        <a href="{{ route('events.editStatus', $event->id) }}" class="btn btn-primary" style="margin-bottom: 10px">Update Status</a>
+                                    @endif
+                                    <a href="{{ route(Auth::user()->role .'.events.delete', $event->id) }}" class="btn btn-danger">Delete</a></td>
                             </tr>
                         @endforeach
                     </tbody>

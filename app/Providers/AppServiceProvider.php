@@ -24,8 +24,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
-        Booking::observe(
-            BookingObserver::class
-        );
+        Booking::observe(BookingObserver::class);
     }
 }

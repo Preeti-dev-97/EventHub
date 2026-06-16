@@ -27,7 +27,7 @@ return new class extends Migration
             $table->time('end');
             $table->decimal('price', 10,2);
             $table->integer('capacity');
-            $table->enum('status', ['draft', 'published'])->default('draft');
+            $table->enum('status', ['draft', 'pending', 'published', 'rejected'])->default('draft');
             $table->string('contact_number');
             $table->timestamps();
             $table->softDeletes();

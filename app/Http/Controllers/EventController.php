@@ -6,19 +6,37 @@ use App\Jobs\ImportEventsJob;
 use App\Jobs\ProcessEventImageJob;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class EventController extends Controller
 {
+    /**
+     * Get authenticated user role
+     */
+    private function getRole(): string
+    {
+        return Auth::user()->role;
+    }
+
+    /**
+     * Get role based route name
+     * admin.events.index or organiser.events.index
+     */
+    private function getRouteName(string $name): string
+    {
+        return $this->getRole() . '.' . $name;
+    }
+
     public function index(Request $request)
     {
         $events = Event::get();
-        return view('admin.events.index', compact('events'));
+        return view('events.index', compact('events'));
     }
 
     public function create()
     {
-        return view('admin.events.create');
+        return view('events.create');
     }
 
     public function store(Request $request)
@@ -47,13 +65,13 @@ class EventController extends Controller
             $event->save();
             ProcessEventImageJob::dispatch($event);
         }
-        return redirect()->route('events.index');
+        return redirect()->route($this->getRouteName('events.index'));
     }
 
     public function edit($event)
     {
         $event = Event::find($event);
-        return view('admin.events.edit', compact('event'));
+        return view('events.edit', compact('event'));
     }
     
     public function update(Request $request, $event)
@@ -98,7 +116,7 @@ class EventController extends Controller
         }
 
         $event->update($data);
-        return redirect()->route('events.index');
+        return redirect()->route($this->getRouteName('events.index'));
     }
 
     public function delete($event)
@@ -118,25 +136,25 @@ class EventController extends Controller
         }
         $event->delete();
 
-        return redirect()->route('events.index');
+        return redirect()->route($this->getRouteName('events.index'));
     }
 
     public function editStatus($event)
     {
         $event = Event::find($event);
-        return view('admin.events.editStatus', compact('event'));
+        return view('events.editStatus', compact('event'));
     }
 
     public function updateStatus(Request $request, $event)
     {
         $event = Event::find($event);
         $event->update(['status' => $request->status]);
-        return redirect()->route('events.index');
+        return redirect()->route($this->getRouteName('events.index'));
     }
 
     public function upload()
     {
-        return view('admin.events.import');
+        return view('events.import');
     }
 
     public function import(Request $request)
